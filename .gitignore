@@ -1,0 +1,5 @@
+backend/.env
+backend/neurolearn.db
+backend/uploads/
+backend/__pycache__/
+backend/venv/
