@@ -102,11 +102,16 @@ Notes:
 
     result = ask_phi3(prompt)
 
-    summary = result["choices"][0]["message"]["content"]
+    print(result)
+
+    if "choices" in result:
+        summary = result["choices"][0]["message"]["content"]
+    else:
+        summary = str(result)
 
     return {
-       "summary": summary
-    } 
+        "summary": summary
+    }
 
 
 # AI Quiz Generator (Phi3)
@@ -172,12 +177,21 @@ Notes:
 
     result = ask_phi3(prompt)
 
-    quiz_text = result["choices"][0]["message"]["content"]
+    print("HF RESPONSE:")
+    print(result)
 
-    try:
-        quiz = json.loads(quiz_text)
-    except:
-        quiz = []
+    if "choices" in result:
+        quiz_text = result["choices"][0]["message"]["content"]
+
+        try:
+            quiz = json.loads(quiz_text)
+        except:
+            quiz = []
+    else:
+        return {
+            "quiz": [],
+            "error": result
+        }
 
     return {
         "quiz": quiz
