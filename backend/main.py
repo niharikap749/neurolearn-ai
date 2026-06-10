@@ -120,6 +120,12 @@ def generate_quiz(filename: str):
 
     file_path = f"uploads/{filename}"
 
+    import os
+
+    print("FILE PATH:", file_path)
+    print("FILES IN UPLOADS:", os.listdir("uploads"))
+    print("EXISTS:", os.path.exists(file_path))
+
     text = ""
 
     if filename.endswith(".pdf"):
