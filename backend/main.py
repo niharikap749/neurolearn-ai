@@ -5,6 +5,7 @@ import os
 import pdfplumber
 import requests
 import json
+from hf_service import ask_phi3
 
 from ai_service import generate_roadmap
 
@@ -99,20 +100,13 @@ Notes:
 {text[:4000]}
 """
 
-    response = requests.post(
-        "http://localhost:11434/api/generate",
-        json={
-            "model": "phi3",
-            "prompt": prompt,
-            "stream": False
-        }
-    )
+    result = ask_phi3(prompt)
 
-    result = response.json()
+    summary = result["choices"][0]["message"]["content"]
 
     return {
-        "summary": result.get("response", "No summary generated.")
-    }
+       "summary": summary
+    } 
 
 
 # AI Quiz Generator (Phi3)
@@ -168,19 +162,21 @@ Notes:
 """
 
     response = requests.post(
-        "http://localhost:11434/api/generate",
-        json={
-            "model": "phi3",
-            "prompt": prompt,
-            "stream": False
-        }
-    )
+    "http://localhost:11434/api/generate",
+    json={
+        "model": "phi3",
+        "prompt": prompt,
+        "stream": False
+    }
+)
 
-    result = response.json()
+    result = ask_phi3(prompt)
+
+    quiz_text = result["choices"][0]["message"]["content"]
 
     try:
-        quiz = json.loads(result["response"])
-    except Exception:
+        quiz = json.loads(quiz_text)
+    except:
         quiz = []
 
     return {

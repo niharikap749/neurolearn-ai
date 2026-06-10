@@ -18,6 +18,7 @@ function Dashboard() {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [quizLoading, setQuizLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   // Load notes on page load
   useEffect(() => {
@@ -132,6 +133,7 @@ function Dashboard() {
       setQuiz([]);
       setSelectedAnswers({});
       setScore(null);
+      setShowResults(false);
   
       const response = await axios.get(
         `http://127.0.0.1:8000/quiz/${filename}`
@@ -159,16 +161,16 @@ function Dashboard() {
   };
 
   const submitQuiz = () => {
-
-    let correct = 0;
+    let total = 0;
   
     quiz.forEach((q, index) => {
       if (selectedAnswers[index] === q.answer) {
-        correct++;
+        total++;
       }
     });
   
-    setScore(correct);
+    setScore(total);
+    setShowResults(true);
   };
 
 
@@ -349,64 +351,78 @@ function Dashboard() {
       )}
 
       {/* Quiz Card */}
-         {/* Quiz Card */}
-         {quiz.length > 0 && (
-        <div className="mt-10 bg-zinc-900/80 backdrop-blur-lg border border-zinc-800 p-8 rounded-3xl shadow-2xl max-w-4xl mx-auto">
+{/* Quiz Card */}
+{quiz.length > 0 && (
+  <div className="mt-10 bg-zinc-900/80 backdrop-blur-lg border border-zinc-800 p-8 rounded-3xl shadow-2xl max-w-4xl mx-auto">
 
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            Quiz Generator 📝
-          </h2>
+    <h2 className="text-3xl font-bold mb-6 text-center">
+      Quiz Generator 📝
+    </h2>
 
-          {quiz.map((q, index) => (
-            <div
-              key={index}
-              className="bg-zinc-800/70 p-5 rounded-2xl mb-6"
-            >
+    {quiz.map((q, index) => (
+      <div
+        key={index}
+        className="bg-zinc-800/70 p-5 rounded-2xl mb-6"
+      >
+        <h3 className="font-semibold mb-4 text-lg">
+          Q{index + 1}. {q.question}
+        </h3>
 
-              <h3 className="font-semibold mb-4 text-lg">
-                Q{index + 1}. {q.question}
-              </h3>
+        {q.options.map((option, i) => (
+          <button
+            key={i}
+            onClick={() => selectAnswer(index, option)}
+            className={`w-full text-left p-3 rounded-xl mb-2 transition ${
+              selectedAnswers[index] === option
+                ? "bg-purple-600"
+                : "bg-zinc-700/50 hover:bg-zinc-700"
+            }`}
+          >
+            {option}
+          </button>
+        ))}
 
-              {q.options.map((option, i) => (
-                <button
-                  key={i}
-                  onClick={() => selectAnswer(index, option)}
-                  className={`w-full text-left p-3 rounded-xl mb-2 transition ${
-                    selectedAnswers[index] === option
-                      ? "bg-purple-600"
-                      : "bg-zinc-700/50 hover:bg-zinc-700"
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
+        {showResults && (
+          <div className="mt-3">
+            {selectedAnswers[index] === q.answer ? (
+              <p className="text-green-400 font-semibold">
+                ✅ Correct
+              </p>
+            ) : (
+              <div>
+                <p className="text-red-400 font-semibold">
+                  ❌ Incorrect
+                </p>
 
-            </div>
-          ))}
-
-          <div className="text-center mt-8">
-
-            <button
-              onClick={submitQuiz}
-              className="bg-green-600 hover:bg-green-700 px-8 py-3 rounded-2xl font-semibold transition"
-            >
-              Submit Quiz
-            </button>
-
+                <p className="text-green-400 mt-1">
+                  Correct Answer: {q.answer}
+                </p>
+              </div>
+            )}
           </div>
+        )}
+      </div>
+    ))}
 
-          {score !== null && (
-            <div className="mt-6 text-center">
+    <div className="text-center mt-8">
+      <button
+        onClick={submitQuiz}
+        className="bg-green-600 hover:bg-green-700 px-8 py-3 rounded-2xl font-semibold transition"
+      >
+        Submit Quiz
+      </button>
+    </div>
 
-              <h3 className="text-3xl font-bold text-green-400">
-                Score: {score}/{quiz.length} 🎉
-              </h3>
+    {score !== null && (
+      <div className="mt-6 text-center">
+        <h3 className="text-3xl font-bold text-green-400">
+          Score: {score}/{quiz.length} 🎉
+        </h3>
+      </div>
+    )}
 
-            </div>
-          )}
-
-        </div>
-      )}
+  </div>
+)}
 
     </div>
   );
