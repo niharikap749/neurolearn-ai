@@ -31,7 +31,7 @@ function Dashboard() {
     try {
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/generate-roadmap",
+        "https://neurolearn-ai-6btb.onrender.com/generate-roadmap",
         {
           goal,
           duration,
@@ -63,7 +63,7 @@ function Dashboard() {
     try {
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/upload-notes",
+        "https://neurolearn-ai-6btb.onrender.com/upload-notes",
         formData
       );
 
@@ -86,7 +86,7 @@ function Dashboard() {
     try {
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/notes"
+        "https://neurolearn-ai-6btb.onrender.com/notes"
       );
 
       setNotes(response.data.notes);
@@ -107,7 +107,7 @@ function Dashboard() {
       setSummary("");
   
       const response = await axios.get(
-        `http://127.0.0.1:8000/summarize/${filename}`
+        `https://neurolearn-ai-6btb.onrender.com/summarize/${filename}`
       );
   
       setSummary(response.data.summary);
@@ -136,7 +136,7 @@ function Dashboard() {
       setShowResults(false);
   
       const response = await axios.get(
-        `http://127.0.0.1:8000/quiz/${filename}`
+        `https://neurolearn-ai-6btb.onrender.com/quiz/${filename}`
       );
   
       setQuiz(response.data.quiz);
