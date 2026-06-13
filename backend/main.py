@@ -10,9 +10,9 @@ from hf_service import ask_phi3
 from ai_service import generate_roadmap
 from auth import router as auth_router
 
-app.include_router(auth_router)
-
 app = FastAPI()
+
+app.include_router(auth_router)
 
 # CORS
 app.add_middleware(
