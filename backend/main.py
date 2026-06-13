@@ -172,14 +172,6 @@ Notes:
 {text[:3000]}
 """
 
-    response = requests.post(
-    "http://localhost:11434/api/generate",
-    json={
-        "model": "phi3",
-        "prompt": prompt,
-        "stream": False
-    }
-)
 
     result = ask_phi3(prompt)
 
