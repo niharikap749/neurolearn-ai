@@ -49,6 +49,12 @@ def register(user: UserRegister):
             detail="Email already registered"
         )
 
+    if len(user.password) > 72:
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be 72 characters or less"
+        )
+
     hashed = hash_password(user.password)
 
     cursor.execute(
